@@ -3,7 +3,7 @@ title: "Test TILPRED R Notebook"
 output: html_notebook
 ---
 
-
+Import example CD8 tumor-infiltrating T-cell dataset from NCBI GEO (TPM matrix, Series GSE86028, Singer et al 2016)
 ```{r Import data}
 fn="tpm_matrix.csv.gz"
 download.file("ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE86nnn/GSE86028/suppl/GSE86028_TILs_sc_wt_mtko.tpm.log2.txt.gz",paste0("input/",fn))
@@ -11,18 +11,22 @@ m <- read.csv(paste0("input/",fn),sep=" ")
 m[1:5,1:5]
 ```
 
+
+Create SingleCellExperiment Object
 ```{r}
 library(SingleCellExperiment)
 sce <- SingleCellExperiment(assays = list(logcounts = as.matrix(m)))
 sce
 ```
 
+Install TILPRED from GitHub Repo
 ```{r}
-library(devtools)
-install_github("carmonalab/TILPRED")
+#library(devtools)
+#install_github("carmonalab/TILPRED")
 library(TILPRED)
 ```
 
+Run TILPRED and show output summary 
 ```{r}
 x <- predictTilState(sce)
 table(x$predictedState)
