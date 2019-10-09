@@ -3,6 +3,28 @@ title: "Test TILPRED R Notebook"
 output: html_notebook
 ---
 
+Manually install TILPRED and required packages, or alternatively packrat::restore()
+```{r eval=F}
+install.packages(c("doParallel","doRNG"))
+install.packages("BiocManager")
+library(BiocManager)
+BiocManager::install("AUCell")
+BiocManager::install("SingleCellExperiment")
+install.packages("devtools")
+install_github("carmonalab/TILPRED")
+#library(packrat)
+#packrat::restore()
+```
+
+
+
+Load SingleCellExperiment and TILPRED libraries
+```{r message=FALSE}
+library(SingleCellExperiment)
+library(TILPRED)
+```
+
+
 Import example CD8 tumor-infiltrating T-cell dataset from NCBI GEO (TPM matrix, Series GSE86028, Singer et al 2016)
 ```{r Import data}
 fn="tpm_matrix.csv.gz"
@@ -14,16 +36,8 @@ m[1:5,1:5]
 
 Create SingleCellExperiment Object
 ```{r}
-library(SingleCellExperiment)
 sce <- SingleCellExperiment(assays = list(logcounts = as.matrix(m)))
 sce
-```
-
-Install TILPRED from GitHub Repo
-```{r}
-#library(devtools)
-#install_github("carmonalab/TILPRED")
-library(TILPRED)
 ```
 
 Run TILPRED and show output summary 
